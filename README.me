@@ -1,0 +1,15 @@
+
+simple run:  
+python main.py  
+
+tests:  
+pytest  
+
+
+env:  
+conda env create -f environment.yml --name pandas-to-sql-conda-env  
+conda activate pandas-to-sql-conda-env  
+conda env update --name pandas-to-sql-conda-env -f environment.yml  
+conda remove --name pandas-to-sql-conda-env --all  
+
+

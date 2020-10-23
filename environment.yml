@@ -1,0 +1,23 @@
+name: pandas-to-sql-dev
+# channels:
+#   - conda-forge
+dependencies:
+  # required
+  - numpy>=1.16.5
+  - python=3.7
+  - pandas>=1.1
+  # - python-dateutil>=2.7.3
+
+  # testing
+  - pytest>=5.0.1
+  # - pytest-cov
+  # - pytest-xdist>=1.21
+  # - pytest-asyncio
+  # - pytest-instafail
+  # - pyarrow>=0.15.0  # pandas.read_parquet, DataFrame.to_parquet, pandas.read_feather, DataFrame.to_feather
+  # - python-snappy  # required by pyarrow
+
+  - sqlalchemy  # pandas.read_sql, DataFrame.to_sql
+  # - pip:
+  #   - git+https://github.com/pandas-dev/pydata-sphinx-theme.git@master
+  #   - git+https://github.com/numpy/numpydoc
