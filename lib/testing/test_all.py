@@ -14,10 +14,10 @@ conn = sqlite3.connect('./example.db') #create db
 df.to_sql(random_table_name, conn, if_exists='replace', index=False, dtype=df_random_columns)
 
 def assert_for(df):
-    actual_query_string = df.new_obj.get_sql_string()
+    actual_query_string = df.df_sql_convert_table.get_sql_string()
     try:
         df_from_sql = pd.read_sql_query(actual_query_string, conn, parse_dates=['random_datetime'])
-        dataframes_compare.assert_dataframes_equals(df.obj_to_intercept, df_from_sql)
+        dataframes_compare.assert_dataframes_equals(df.df_pandas, df_from_sql)
     except Exception as e:
         print(actual_query_string)
         raise e

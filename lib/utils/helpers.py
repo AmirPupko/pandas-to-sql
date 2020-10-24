@@ -2,18 +2,17 @@ import pandas as pd
 from lib.Table import Table
 from lib.Column import Column
 from lib.GroupedTable import GroupedTable
-from lib.utils.ObjectMethodIntercepter import ObjectMethodIntercepter
+from lib.utils.PandasDataFrameIntercepter import PandasDataFrameIntercepter
 from copy import copy
 
 ## Conventions
 def flatten_grouped_dataframe(df):
-    if not isinstance(df, ObjectMethodIntercepter):
-        raise Exception(f"can only get type {str(type(ObjectMethodIntercepter))}")
-    df_c = copy(df.obj_to_intercept)
-    print(type(df_c))
+    if not isinstance(df, PandasDataFrameIntercepter):
+        raise Exception(f"can only get type {str(type(PandasDataFrameIntercepter))}")
+    df_c = copy(df.df_pandas)
     df_c.columns = df_c.columns.map('_'.join)
     df_c = df_c.reset_index()
-    return ObjectMethodIntercepter(df_c, copy(df.new_obj))
+    return PandasDataFrameIntercepter(df_c, copy(df.df_sql_convert_table))
 
 
 ## Types
