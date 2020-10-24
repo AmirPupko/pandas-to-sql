@@ -1,12 +1,14 @@
 name: pandas-to-sql-dev
-# channels:
-#   - conda-forge
+channels:
+  - defaults
+  - conda-forge
 dependencies:
   # required
-  - numpy>=1.16.5
+  - numpy>=1.19
   - python=3.7
   - pandas>=1.1
   # - python-dateutil>=2.7.3
+  - hypothesis
 
   # testing
   - pytest>=5.0.1
@@ -18,6 +20,7 @@ dependencies:
   # - python-snappy  # required by pyarrow
 
   - sqlalchemy  # pandas.read_sql, DataFrame.to_sql
+  # - sqlite3
   # - pip:
   #   - git+https://github.com/pandas-dev/pydata-sphinx-theme.git@master
   #   - git+https://github.com/numpy/numpydoc

@@ -7,9 +7,12 @@ pytest
 
 
 env:  
-conda env create -f environment.yml --name pandas-to-sql-conda-env  
-conda activate pandas-to-sql-conda-env  
-conda env update --name pandas-to-sql-conda-env -f environment.yml  
-conda remove --name pandas-to-sql-conda-env --all  
+conda env create -f environment.yml --prefix ./env  
+
+conda activate ./env  
+
+conda env update --prefix ./env -f environment.yml  
+
+conda remove --prefix ./env --all  
 
 
