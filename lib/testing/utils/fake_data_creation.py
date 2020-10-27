@@ -31,7 +31,6 @@ def random_timedelta(start, end, n, unit='D', seed=None):
 def create_fake_dataset(start=pd.to_datetime('2015-01-01'), end=pd.to_datetime('2018-01-01')):
     df = pd.DataFrame()
     df_size = 1000
-    random_table_name = 'random_data'
     df_random_columns = {
         'random_int': 'INT',
         'random_float': 'FLOAT',
@@ -44,4 +43,4 @@ def create_fake_dataset(start=pd.to_datetime('2015-01-01'), end=pd.to_datetime('
     df['random_bool'] = np.random.randn(df_size) > 0
     df['random_datetime'] = random_datetimes_or_dates(start, end, n=df_size)
     df['random_str'] = pd.util.testing.rands_array(10, df_size)
-    return df, df_random_columns, random_table_name
+    return df, df_random_columns
