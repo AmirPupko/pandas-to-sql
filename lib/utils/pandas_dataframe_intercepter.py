@@ -37,6 +37,9 @@ class PandasDataFrameIntercepter:
             return lambda *args, **kwargs: df_sql_convert_table_attr(*args, **kwargs)
 
         df_pandas_attr =  object.__getattribute__(self.df_pandas, name)
+        if name=='columns' and not hasattr(df_pandas_attr, '__call__'):
+            return df_pandas_attr
+              
         if hasattr(df_sql_convert_table_attr, '__call__'):
             def _(*args, **kwargs):
                 def __dictionary_map_values(d, func):

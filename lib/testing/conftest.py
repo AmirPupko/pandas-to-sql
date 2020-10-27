@@ -13,6 +13,7 @@ DF1.to_sql(TABLE_NAME_1, sql_connection, if_exists='replace', index=False, dtype
 
 TABLE_NAME_2 = 'random_data_2'
 DF2, SCHEMA_2 = fake_data_creation.create_fake_dataset()
+DF2.columns = DF2.columns.map(lambda c: c + '_2')
 DF2.to_sql(TABLE_NAME_2, sql_connection, if_exists='replace', index=False, dtype=SCHEMA_2)
 
 def pytest_configure():
