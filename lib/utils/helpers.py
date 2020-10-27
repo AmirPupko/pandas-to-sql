@@ -1,8 +1,8 @@
 import pandas as pd
-from lib.Table import Table
-from lib.Column import Column
-from lib.GroupedTable import GroupedTable
-from lib.utils.PandasDataFrameIntercepter import PandasDataFrameIntercepter
+from lib.table import Table
+from lib.column import Column
+from lib.grouped_table import GroupedTable
+from lib.utils.pandas_dataframe_intercepter import PandasDataFrameIntercepter
 from copy import copy
 
 ## Conventions

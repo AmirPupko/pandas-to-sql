@@ -1,5 +1,5 @@
-from lib.Column import Column
-from lib.GroupedTable import GroupedTable
+from lib.column import Column
+from lib.grouped_table import GroupedTable
 from copy import copy
 
 class Table:

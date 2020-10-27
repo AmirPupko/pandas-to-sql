@@ -1,5 +1,6 @@
 import numbers
 
+
 def get_BinOp_result_type(l, r):
     NUMERIC_COLUMNS_TYPES = ['INT','FLOAT']
     if isinstance(l, Column) and isinstance(r, Column):

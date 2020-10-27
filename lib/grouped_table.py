@@ -1,5 +1,5 @@
 from copy import copy
-from lib.Column import Column
+from lib.column import Column
 
 class GroupedTable:
     table = None
@@ -49,7 +49,7 @@ class GroupedTable:
                                     is_direct_column=True)
 
         grouping_field = ', '.join(list(map(lambda k: self.groupings[k].sql_string, self.groupings.keys())))
-        
+        from lib.table import Table
         return Table(table_name='Temp',
                      columns=new_table_columns,
                      filters=[],
@@ -57,7 +57,6 @@ class GroupedTable:
                      sql_string=f'{self_table_copy.get_sql_string()} GROUP BY {grouping_field}')
 
     def agg(self, v):
-        from lib.Table import Table
         if isinstance(v, str):
             return agg(self, dict(zip(self.table.columns.keys(), v)))
         elif isinstance(v, list):
@@ -121,6 +120,7 @@ class GroupedTable:
 
             grouping_field = ', '.join(list(map(lambda k: self.groupings[k].sql_string, self.groupings.keys())))
 
+            from lib.table import Table
             return Table(table_name='Temp',
                          columns=new_table_columns,
                          filters=[],

@@ -1,7 +1,7 @@
 from copy import copy
-from lib.Table import Table
+from lib.table import Table
 from lib.utils.helpers import  create_schema_from_df
-from lib.utils.PandasDataFrameIntercepter import PandasDataFrameIntercepter
+from lib.utils.pandas_dataframe_intercepter import PandasDataFrameIntercepter
 
 
 def wrap_df(df, table_name):
