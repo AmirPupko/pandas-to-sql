@@ -66,7 +66,6 @@ class PandasDataFrameIntercepter:
         return PandasDataFrameIntercepter(self.df_pandas, self.df_sql_convert_table)
 
     def __getattr__(self, attribute_name):
-        print(attribute_name)
         a = self.df_pandas[attribute_name]
         b = self.df_sql_convert_table[attribute_name]
         return PandasDataFrameIntercepter(a, b)
