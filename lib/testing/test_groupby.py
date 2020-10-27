@@ -8,7 +8,6 @@ def test_groupby_mean():
     df2 = pytest.df1.groupby('random_int').random_float.mean()
     assert_(flatten_grouped_dataframe(df2))
 
-
 def test_groupby_sum():
     df2 = pytest.df1.groupby('random_int').random_float.sum()
     assert_(flatten_grouped_dataframe(df2))

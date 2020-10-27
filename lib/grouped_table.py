@@ -28,33 +28,13 @@ class GroupedTable:
         return self[attribute_name]
     
     def mean(self):
-        if len( set(self.table.columns.keys()) & set(self.groupings.keys()) ) > 0:
-            raise Exception("grouped table doesnt support same column in 'on' and 'select'")
+        return self.agg(dict(map(lambda k: (k,'mean'),self.table.columns.keys())))
 
-        # create groupby columns query
-        groupby_select_columns = {}
-        for k in self.table.columns.keys():
-            groupby_select_columns[k] = Column(dtype='FLOAT',
-                                    sql_string=f'AVG({self.table[k].sql_string})',
-                                    is_direct_column=False)
-        groupby_select_columns.update(self.groupings)
-        self_table_copy = copy(self.table)
-        self_table_copy.columns = groupby_select_columns
-        
-        # create new table columns
-        new_table_columns = {}
-        for k in groupby_select_columns.keys():
-            new_table_columns[k] = Column(dtype=groupby_select_columns[k].dtype,
-                                    sql_string=k,
-                                    is_direct_column=True)
+    def count(self):
+        return self.agg(dict(map(lambda k: (k,'count'),self.table.columns.keys())))
 
-        grouping_field = ', '.join(list(map(lambda k: self.groupings[k].sql_string, self.groupings.keys())))
-        from lib.table import Table
-        return Table(table_name='Temp',
-                     columns=new_table_columns,
-                     filters=[],
-                     had_changed=False,
-                     sql_string=f'{self_table_copy.get_sql_string()} GROUP BY {grouping_field}')
+    def sum(self):
+        return self.agg(dict(map(lambda k: (k,'sum'),self.table.columns.keys())))
 
     def agg(self, v):
         if isinstance(v, str):
