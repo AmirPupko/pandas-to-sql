@@ -1,24 +1,19 @@
 import numbers
 
+NUMERIC_COLUMNS_TYPES = ['INT','FLOAT']
 
-def get_BinOp_result_type(l, r):
-    NUMERIC_COLUMNS_TYPES = ['INT','FLOAT']
-    if isinstance(l, Column) and isinstance(r, Column):
-        if l.dtype == 'INT' and r.dtype == 'INT': return 'INT'
-        elif l.dtype in NUMERIC_COLUMNS_TYPES and r.dtype in NUMERIC_COLUMNS_TYPES: return 'FLOAT'
-        elif l.dtype == 'VARCHAR' and r.dtype == 'VARCHAR': return 'VARCHAR'
-        else: raise Exception('Columns operation not supprted. left type: %s, right type: %s' % (l.dtype, r.dtype))
-    elif isinstance(l, Column):
-        if l.dtype == 'VARCHAR' and isinstance(r, str): return 'VARCHAR'
-        elif l.dtype == 'INT' and isinstance(r, int): return 'INT'
-        elif l.dtype in NUMERIC_COLUMNS_TYPES and isinstance(r, numbers.Number): return 'FLOAT'
-        else: raise Exception('Columns operation not supprted. left type: %s, right type: %s' % (l.dtype, type(r)))
-    elif isinstance(r, Column):
-        if r.dtype == 'VARCHAR' and isinstance(l, str): return 'VARCHAR'
-        elif r.dtype == 'INT' and isinstance(l, int): return 'INT'
-        elif r.dtype in NUMERIC_COLUMNS_TYPES and isinstance(l, numbers.Number): return 'FLOAT'
-        else: raise Exception('Columns operation not supprted. left type: %s, right type: %s' % (type(l), r.dtype))
-    raise Exception('No node of type Column')
+def get_type(v):
+    if isinstance(v, Column): return v.dtype
+    elif isinstance(v, str): return 'VARCHAR'
+    elif isinstance(v, int): return 'INT'
+    elif isinstance(v, numbers.Number): return 'FLOAT'
+    else: raise Exception(f"Value not supported. supporting: premitives and {str(Column)}. got {str(type(v))}")
+
+def is_numeric_type(v_type):
+    return v_type in NUMERIC_COLUMNS_TYPES
+
+def numeric_op_result_from_types(l_type, r_type):
+    return 'INT' if l_type is 'INT' and r_type is 'INT' else 'FLOAT'
 
 def value_to_sql_string(value):
     if isinstance(value, numbers.Number):
@@ -27,8 +22,12 @@ def value_to_sql_string(value):
         return "'" + value + "'"
     elif isinstance(value, Column):
         return value.sql_string
-    raise Exception('value not supported')
+    raise Exception(f"Value not supported. supporting: premitives and {str(Column)}. got {str(type(value))}")
 
+def create_column_from_operation(l, r, dtype, op):
+    return Column(dtype=dtype,
+                    sql_string=f'({value_to_sql_string(l)} {op} {value_to_sql_string(r)})',
+                    is_direct_column=False)  
 
 class Column:
     dtype = None
@@ -41,11 +40,27 @@ class Column:
         self.is_direct_column = is_direct_column
     
     def __add__(self, r):
-        result_column_type = get_BinOp_result_type(self, r)
-        operand = '||' if result_column_type == 'VARCHAR' else '+'
-        return Column(dtype=result_column_type,
-                      sql_string=f'({value_to_sql_string(self)} {operand} {value_to_sql_string(r)})',
-                     is_direct_column=False)
+        def _add_res_type(l_type, r_type):
+            if l_type == 'INT' and r_type == 'INT': return 'INT'
+            elif l_type == 'VARCHAR' and r_type == 'VARCHAR': return 'VARCHAR'
+            elif is_numeric_type(l_type) and is_numeric_type(r_type): return 'FLOAT'
+            else: raise Exception('Columns operation not supprted. left type: %s, right type: %s' % (l.dtype, r.dtype))
+        
+        l_type = get_type(self)
+        r_type = get_type(r)
+        result_column_type = _add_res_type(l_type, r_type)
+        op = '||' if result_column_type == 'VARCHAR' else '+'
+        return create_column_from_operation(self, r, result_column_type, op)
+
+    def __sub__(self, r):
+        l_type = get_type(self)
+        r_type = get_type(r)
+        
+        if not is_numeric_type(l_type) or not is_numeric_type(r_type):
+            raise Exception(f"sub supporting only numerics and dates")
+
+        result_column_type = numeric_op_result_from_types(l_type, r_type)
+        return create_column_from_operation(self, r, result_column_type, '-')
 
     def __gt__(self, r):
         return Column(dtype='BOOL',
