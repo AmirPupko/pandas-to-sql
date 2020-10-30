@@ -1,4 +1,5 @@
 from copy import copy
+import operator
 
 class PandasDataFrameIntercepter:
     def __init__(self, df_pandas, df_sql_convert_table):
@@ -76,7 +77,107 @@ class PandasDataFrameIntercepter:
     def __copy__(self):
         return PandasDataFrameIntercepter(copy(self.df_pandas), copy(self.df_sql_convert_table))
     
-    def __add__(self, r):
-        a = self.df_pandas + PandasDataFrameIntercepter.get_attr_for_df_pandas_if_needed(r)
-        b = self.df_sql_convert_table + PandasDataFrameIntercepter.get_attr_for_df_sql_convert_table_if_needed(r)
+    @staticmethod
+    def run_operation_and_return(left, right, op):
+        left_ = PandasDataFrameIntercepter.get_attr_for_df_pandas_if_needed(left)
+        right_ = PandasDataFrameIntercepter.get_attr_for_df_pandas_if_needed(right)
+        a = op(left_, right_)
+
+        left_ = PandasDataFrameIntercepter.get_attr_for_df_sql_convert_table_if_needed(left)
+        right_ = PandasDataFrameIntercepter.get_attr_for_df_sql_convert_table_if_needed(right)
+        b = op(left_, right_)
         return PandasDataFrameIntercepter(a, b)
+    
+    # comparisons
+    def __lt__(self,other):
+        return PandasDataFrameIntercepter.run_operation_and_return(self, other, operator.lt)
+
+    def __le__(self,other):
+        return PandasDataFrameIntercepter.run_operation_and_return(self, other, operator.le)
+
+    def __gt__(self,other):
+        return PandasDataFrameIntercepter.run_operation_and_return(self, other, operator.gt)
+
+    def __ge__(self,other):
+        return PandasDataFrameIntercepter.run_operation_and_return(self, other, operator.ge)
+
+    def __eq__(self,other):
+        return PandasDataFrameIntercepter.run_operation_and_return(self, other, operator.eq)
+
+    def __ne__(self,other):
+        return PandasDataFrameIntercepter.run_operation_and_return(self, other, operator.ne)
+
+    def __abs__(self, r):
+        return PandasDataFrameIntercepter.run_operation_and_return(self, r, operator.abs)
+        
+    def __neg__(self, r):
+        return PandasDataFrameIntercepter.run_operation_and_return(self, r, operator.neg)
+ 
+    def __contains__(self, r):
+        return PandasDataFrameIntercepter.run_operation_and_return(self, r, operator.contains)
+
+    # numeric 
+    def __add__(self, r):
+        return PandasDataFrameIntercepter.run_operation_and_return(self, r, operator.add)
+    
+    def __sub__(self, r):
+        return PandasDataFrameIntercepter.run_operation_and_return(self, r, operator.sub)
+    
+    def __mul__(self, r):
+        return PandasDataFrameIntercepter.run_operation_and_return(self, r, operator.mul)
+    
+    def __matmul__(self, r):
+        return PandasDataFrameIntercepter.run_operation_and_return(self, r, operator.matmul)
+
+    def __truediv__(self, r):
+        return PandasDataFrameIntercepter.run_operation_and_return(self, r, operator.truediv)
+    
+    def __floordiv__(self, r):
+        return PandasDataFrameIntercepter.run_operation_and_return(self, r, operator.floordiv)
+    
+    def __mod__(self, r):
+        return PandasDataFrameIntercepter.run_operation_and_return(self, r, operator.mod)
+    
+    def __pow__(self, r):
+        return PandasDataFrameIntercepter.run_operation_and_return(self, r, operator.pow)
+    
+    def __and__(self, r):
+        return PandasDataFrameIntercepter.run_operation_and_return(self, r, operator.and_)
+    
+    def __or__(self, r):
+        return PandasDataFrameIntercepter.run_operation_and_return(self, r, operator.or_)
+
+    # numeric r
+    def __radd__(self, l):
+        return PandasDataFrameIntercepter.run_operation_and_return(l, self, operator.add)
+    
+    def __rsub__(self, l):
+        return PandasDataFrameIntercepter.run_operation_and_return(l, self, operator.sub)
+    
+    def __rmul__(self, l):
+        return PandasDataFrameIntercepter.run_operation_and_return(l, self, operator.mul)
+    
+    def __rmatmul__(self, l):
+        return PandasDataFrameIntercepter.run_operation_and_return(l, self, operator.matmul)
+
+    def __rtruediv__(self, l):
+        return PandasDataFrameIntercepter.run_operation_and_return(l, self, operator.truediv)
+    
+    def __rfloordiv__(self, l):
+        return PandasDataFrameIntercepter.run_operation_and_return(l, self, operator.floordiv)
+    
+    def __rmod__(self, l):
+        return PandasDataFrameIntercepter.run_operation_and_return(l, self, operator.mod)
+    
+    def __rpow__(self, l):
+        return PandasDataFrameIntercepter.run_operation_and_return(l, self, operator.pow)
+    
+    def __rand__(self, l):
+        return PandasDataFrameIntercepter.run_operation_and_return(l, self, operator.and_)
+    
+    def __ror__(self, l):
+        return PandasDataFrameIntercepter.run_operation_and_return(l, self, operator.or_)
+  
+    
+    
+    
