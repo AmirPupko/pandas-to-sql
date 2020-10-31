@@ -3,3 +3,4 @@
 example.db
 .vscode/
 **/env/*
+local/*

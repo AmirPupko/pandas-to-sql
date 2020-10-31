@@ -17,3 +17,8 @@ def test_sub():
     df = pytest.df1
     df['new_value'] = df.random_float - 10
     assert_(df)
+
+def test_rsub():
+    df = pytest.df1
+    df['new_value'] = 10 - df.random_float
+    assert_(df)

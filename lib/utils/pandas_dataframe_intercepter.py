@@ -87,6 +87,14 @@ class PandasDataFrameIntercepter:
         right_ = PandasDataFrameIntercepter.get_attr_for_df_sql_convert_table_if_needed(right)
         b = op(left_, right_)
         return PandasDataFrameIntercepter(a, b)
+
+    @staticmethod
+    def run_operation_single_and_return(obj, op):
+        a = PandasDataFrameIntercepter.get_attr_for_df_pandas_if_needed(obj)
+        b = PandasDataFrameIntercepter.get_attr_for_df_sql_convert_table_if_needed(obj)
+        a = op(a)
+        b = op(b)
+        return PandasDataFrameIntercepter(a, b)
     
     # comparisons
     def __lt__(self,other):
@@ -107,12 +115,12 @@ class PandasDataFrameIntercepter:
     def __ne__(self,other):
         return PandasDataFrameIntercepter.run_operation_and_return(self, other, operator.ne)
 
-    def __abs__(self, r):
-        return PandasDataFrameIntercepter.run_operation_and_return(self, r, operator.abs)
+    def __abs__(self):
+        return PandasDataFrameIntercepter.run_operation_single_and_return(self, abs)
         
-    def __neg__(self, r):
-        return PandasDataFrameIntercepter.run_operation_and_return(self, r, operator.neg)
- 
+    # def __neg__(self):
+    #     return PandasDataFrameIntercepter.run_operation_single_and_return(self, xxx)
+
     def __contains__(self, r):
         return PandasDataFrameIntercepter.run_operation_and_return(self, r, operator.contains)
 
