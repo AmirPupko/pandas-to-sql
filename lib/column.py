@@ -34,12 +34,18 @@ def get_add_op_res_type(l_type, r_type):
     if l_type == 'INT' and r_type == 'INT': return 'INT'
     elif l_type == 'VARCHAR' and r_type == 'VARCHAR': return 'VARCHAR'
     elif is_numeric_type(l_type) and is_numeric_type(r_type): return 'FLOAT'
-    else: raise Exception(f"add not supprting received types. received: left type: {l_type}, right type: r_type")
+    else: raise Exception(f"add not supprting received types. received: left type: {l_type}, right type: {r_type}")
 
 def get_sub_op_res_type(l_type, r_type):
     if not is_numeric_type(l_type) or not is_numeric_type(r_type):
         raise Exception(f"sub supporting only numerics and dates")
     return numeric_op_result_from_types(l_type, r_type)
+
+def get_mul_op_res_type(l_type, r_type):
+    if l_type == 'INT' and r_type == 'INT': return 'INT'
+    elif is_numeric_type(l_type) and is_numeric_type(r_type): return 'FLOAT'
+    else: raise Exception(f"mul not supprting received types. received: left type: {l_type}, right type: {r_type}")
+
 
 class Column:
     dtype = None
@@ -79,6 +85,19 @@ class Column:
         r_type = get_type(self)
         result_column_type = get_sub_op_res_type(l_type, r_type)
         return create_column_from_operation(l, self, result_column_type, '-')
+
+    def __mul__(self, r):
+        l_type = get_type(self)
+        r_type = get_type(r)
+        result_column_type = get_mul_op_res_type(l_type, r_type)
+        return create_column_from_operation(self, r, result_column_type, '*')
+    
+    def __rmul__(self, l):
+        l_type = get_type(l)
+        r_type = get_type(self)
+        result_column_type = get_mul_op_res_type(l_type, r_type)
+        return create_column_from_operation(l, self, result_column_type, '*')
+
 
     def __lt__(self,other):
         return create_column_from_operation(self, other, 'BOOL', '<')

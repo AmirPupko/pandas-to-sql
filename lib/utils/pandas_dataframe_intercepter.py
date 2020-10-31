@@ -134,8 +134,8 @@ class PandasDataFrameIntercepter:
     def __mul__(self, r):
         return PandasDataFrameIntercepter.run_operation_and_return(self, r, operator.mul)
     
-    def __matmul__(self, r):
-        return PandasDataFrameIntercepter.run_operation_and_return(self, r, operator.matmul)
+    # def __matmul__(self, r):
+    #     return PandasDataFrameIntercepter.run_operation_and_return(self, r, operator.matmul)
 
     def __truediv__(self, r):
         return PandasDataFrameIntercepter.run_operation_and_return(self, r, operator.truediv)
