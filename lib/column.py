@@ -14,6 +14,8 @@ def is_numeric_type(v_type):
     return v_type in NUMERIC_COLUMNS_TYPES
 
 def numeric_op_result_from_types(l_type, r_type):
+    if not is_numeric_type(l_type) or not is_numeric_type(r_type):
+        raise Exception(f"supporting only numerics")
     return 'INT' if l_type is 'INT' and r_type is 'INT' else 'FLOAT'
 
 def value_to_sql_string(value):
@@ -36,10 +38,10 @@ def get_add_op_res_type(l_type, r_type):
     elif is_numeric_type(l_type) and is_numeric_type(r_type): return 'FLOAT'
     else: raise Exception(f"add not supprting received types. received: left type: {l_type}, right type: {r_type}")
 
-def get_sub_op_res_type(l_type, r_type):
-    if not is_numeric_type(l_type) or not is_numeric_type(r_type):
-        raise Exception(f"sub supporting only numerics and dates")
-    return numeric_op_result_from_types(l_type, r_type)
+# def get_sub_op_res_type(l_type, r_type):
+#     if not is_numeric_type(l_type) or not is_numeric_type(r_type):
+#         raise Exception(f"sub supporting only numerics and dates")
+#     return numeric_op_result_from_types(l_type, r_type)
 
 def get_mul_op_res_type(l_type, r_type):
     if l_type == 'INT' and r_type == 'INT': return 'INT'
@@ -77,13 +79,13 @@ class Column:
     def __sub__(self, r):
         l_type = get_type(self)
         r_type = get_type(r)
-        result_column_type = get_sub_op_res_type(l_type, r_type)
+        result_column_type = numeric_op_result_from_types(l_type, r_type)
         return create_column_from_operation(self, r, result_column_type, '-')
 
     def __rsub__(self, l):
         l_type = get_type(l)
         r_type = get_type(self)
-        result_column_type = get_sub_op_res_type(l_type, r_type)
+        result_column_type = numeric_op_result_from_types(l_type, r_type)
         return create_column_from_operation(l, self, result_column_type, '-')
 
     def __mul__(self, r):
@@ -98,6 +100,30 @@ class Column:
         result_column_type = get_mul_op_res_type(l_type, r_type)
         return create_column_from_operation(l, self, result_column_type, '*')
 
+    def __truediv__(self, r):
+        l_type = get_type(self)
+        r_type = get_type(r)
+        # if l_type=='INT' and r_type=='INT':
+        #     raise Exception('truediv not supporting 2 int columns. try converting one of the columns to float')
+        # result_column_type =  #numeric_op_result_from_types(l_type, r_type)
+        return create_column_from_operation(self, r, 'FLOAT', '/')
+    
+    def __rtruediv__(self, l):
+        l_type = get_type(l)
+        r_type = get_type(self)
+        # if l_type=='INT' and r_type=='INT':
+        #     raise Exception('truediv not supporting 2 int columns. try converting one of the columns to float')
+        result_column_type = numeric_op_result_from_types(l_type, r_type)
+        return create_column_from_operation(l, self, result_column_type, '/')
+
+    def __floordiv__(self, l):
+        # cast ( x as int ) - ( x < cast ( x as int ))
+        l_type = get_type(l)
+        r_type = get_type(self)
+        # if l_type=='INT' and r_type=='INT':
+        #     raise Exception('truediv not supporting 2 int columns. try converting one of the columns to float')
+        # result_column_type = get_sub_op_res_type(l_type, r_type)
+        return create_column_from_operation(l, self, 'FLOAT', '/')
 
     def __lt__(self,other):
         return create_column_from_operation(self, other, 'BOOL', '<')

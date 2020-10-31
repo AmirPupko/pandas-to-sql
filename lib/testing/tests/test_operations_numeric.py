@@ -44,3 +44,27 @@ def test_rmul():
     df['new_value'] = 2.5 * df.random_int
     assert_(df)
 
+def test_truediv():
+    df = pytest.df1
+    df['new_value'] = df.random_int / 2.0
+    assert_(df)
+
+def test_truediv2():
+    df = pytest.df1
+    df['new_value'] = df.random_float / 2
+    assert_(df)
+
+def test_truediv_int_int():
+    df = pytest.df1
+    df['new_value'] = df.random_int / 2
+    assert_(df)
+
+# def test_rtruediv():
+#     df = pytest.df1
+#     df['new_value'] = 2 / df.random_float
+#     assert_(df)
+
+# def test_floordiv():
+#     df = pytest.df1
+#     df['new_value'] = df.random_float // 2.0
+#     assert_(df)
