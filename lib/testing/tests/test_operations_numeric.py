@@ -59,12 +59,17 @@ def test_truediv_int_int():
     df['new_value'] = df.random_int / 2
     assert_(df)
 
-# def test_rtruediv():
-#     df = pytest.df1
-#     df['new_value'] = 2 / df.random_float
-#     assert_(df)
+def test_rtruediv():
+    df = pytest.df1
+    df['new_value'] = 2 / df.random_float
+    assert_(df)
 
-# def test_floordiv():
-#     df = pytest.df1
-#     df['new_value'] = df.random_float // 2.0
-#     assert_(df)
+def test_floordiv():
+    df = pytest.df1
+    df['new_value'] = df.random_float // 2.0
+    assert_(df)
+
+def test_rfloordiv():
+    df = pytest.df1
+    df['new_value'] = 1 // df.random_float
+    assert_(df)
