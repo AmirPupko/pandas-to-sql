@@ -118,8 +118,11 @@ class PandasDataFrameIntercepter:
     def __abs__(self):
         return PandasDataFrameIntercepter.run_operation_single_and_return(self, abs)
         
-    # def __neg__(self):
-    #     return PandasDataFrameIntercepter.run_operation_single_and_return(self, xxx)
+    def __neg__(self):
+        return PandasDataFrameIntercepter.run_operation_single_and_return(self, operator.neg)
+
+    def __invert__(self):
+        return PandasDataFrameIntercepter.run_operation_single_and_return(self, operator.invert)
 
     def __contains__(self, r):
         return PandasDataFrameIntercepter.run_operation_and_return(self, r, operator.contains)

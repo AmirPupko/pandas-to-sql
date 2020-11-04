@@ -138,12 +138,29 @@ class Column:
     def __ne__(self,other):
         return create_column_from_operation(self, other, 'BOOL', '<>')
     
+    def __invert__(self):
+        if self.dtype != 'BOOL':
+            raise Exception(f'tilde support only bool columns, got: {self.dtype}')
+        return Column(dtype='BOOL',
+                sql_string=f'(NOT({value_to_sql_string(self)}))',
+                is_direct_column=False)
+
     def __abs__(self):
         t = get_type(self)
         if not is_numeric_type(t):
             raise Exception(f'abs support only numeric columns, got: {str(t)}')
         return Column(dtype=t,
                     sql_string=f'ABS({value_to_sql_string(self)})',
+                    is_direct_column=False)  
+
+    def __neg__(self):
+        t = get_type(self)
+        sql_string = None
+        if is_numeric_type(t): sql_string = f'(-({value_to_sql_string(self)}))'
+        elif t == 'BOOL': sql_string = f'(NOT({value_to_sql_string(self)}))'
+        else: raise Exception(f'- support only numeric and bool columns, got: {str(t)}')
+        return Column(dtype=t,
+                    sql_string=sql_string,
                     is_direct_column=False)  
        
 

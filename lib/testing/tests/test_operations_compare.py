@@ -51,3 +51,18 @@ def test_ne():
     df = pytest.df1
     df['new_value'] = df.random_int != 3
     assert_(df)
+
+def test_tilde():
+    df = pytest.df1
+    df['new_value'] = ~df.random_bool
+    assert_(df)
+
+def test_neg_bool():
+    df = pytest.df1
+    df['new_value'] = -df.random_bool
+    assert_(df)
+
+def test_neg_numeric():
+    df = pytest.df1
+    df['new_value'] = -df.random_int
+    assert_(df)
