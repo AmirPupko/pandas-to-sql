@@ -23,8 +23,7 @@ class Table:
         else:
             for column_name in column_dtype_map.keys():
                 self[column_name] = Column(dtype=column_dtype_map[column_name], 
-                                          sql_string=column_name,
-                                          is_direct_column=True)
+                                          sql_string=column_name)
 
     def __getitem__(self, key):
         if isinstance(key, Column):
@@ -39,15 +38,12 @@ class Table:
             return self.select(key)
 
         c = copy(self.columns[key])
-        if c.is_direct_column:
-            c.sql_string = f'{self.table_name}.{key}'
         return c
 
     def __setitem__(self, key, newvalue):
-        if isinstance(newvalue, Column) == False:
+        if not isinstance(newvalue, Column):
             raise Exception('trying to set table column with wrong type. expected type: %s, got type: %s' % (str(type(Column)), str(type(newvalue))))
         self.had_changed = True
-        newvalue.is_direct_column=False
         self.columns[key] = newvalue
     
     def __getattr__(self, attribute_name):
@@ -160,7 +156,7 @@ class Table:
         return GroupedTable(copy(self), groupings=groupings)
         
     def get_sql_string(self):
-        if self.sql_string and not self.had_changed: #maybe not had_changes equivalent to all columns is_direct_column==true 
+        if self.sql_string and not self.had_changed:
             return self.sql_string
         
         from_field = None
@@ -171,7 +167,7 @@ class Table:
             from_field = self.table_name
 
         single_select_field_format = '(%s) AS %s'
-        selected_fields = ', '.join(list(map(lambda x: single_select_field_format % (self[x].sql_string, x if self[x].is_direct_column else f"'{x}'"), self.columns.keys())))
+        selected_fields = ', '.join(list(map(lambda x: single_select_field_format % (self[x].sql_string, x), self.columns.keys())))
 
         single_where_field_format = '(%s)'
         where_cond = ' AND '.join(list(map(lambda c: single_where_field_format % (c.sql_string), self.filters)))

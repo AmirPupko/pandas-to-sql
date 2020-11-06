@@ -36,8 +36,7 @@ def value_to_sql_string(value):
 
 def create_column_from_operation(l, r, dtype, op):
     return Column(dtype=dtype,
-                    sql_string=f'({value_to_sql_string(l)} {op} {value_to_sql_string(r)})',
-                    is_direct_column=False)  
+                    sql_string=f'({value_to_sql_string(l)} {op} {value_to_sql_string(r)})')  
 
 def get_add_op_res_type(l, r):
     l_type = get_type(l)
@@ -58,15 +57,13 @@ def get_mul_op_res_type(l, r):
 class Column:
     dtype = None
     sql_string = None
-    is_direct_column = None
     
-    def __init__(self, dtype, sql_string, is_direct_column):
+    def __init__(self, dtype, sql_string):
         self.dtype = dtype
         self.sql_string = sql_string
-        self.is_direct_column = is_direct_column
     
     def __copy__(self):
-        return Column(self.dtype, self.sql_string, self.is_direct_column)
+        return Column(self.dtype, self.sql_string)
 
     def __add__(self, r):
         result_column_type = get_add_op_res_type(self, r)
@@ -97,28 +94,24 @@ class Column:
     def __truediv__(self, r):
         validate_numeric(self, r)
         return Column(dtype='FLOAT',
-                sql_string=f'(({value_to_sql_string(self)} + 0.0) / {value_to_sql_string(r)})',
-                is_direct_column=False)  
+                sql_string=f'(({value_to_sql_string(self)} + 0.0) / {value_to_sql_string(r)})')  
     
     def __rtruediv__(self, l):
         validate_numeric(l, self)
         return Column(dtype='FLOAT',
-                sql_string=f'(({value_to_sql_string(l)} + 0.0) / {value_to_sql_string(self)})',
-                is_direct_column=False)  
+                sql_string=f'(({value_to_sql_string(l)} + 0.0) / {value_to_sql_string(self)})')  
 
     def __floordiv__(self, r):
         validate_numeric(self, r)
         # http://sqlite.1065341.n5.nabble.com/floor-help-td46158.html
         return Column(dtype='FLOAT',
-                sql_string=f'( ROUND(({value_to_sql_string(self)} / {value_to_sql_string(r)}) - 0.5) )',
-                is_direct_column=False)
+                sql_string=f'( ROUND(({value_to_sql_string(self)} / {value_to_sql_string(r)}) - 0.5) )')
 
     def __rfloordiv__(self, l):
         validate_numeric(l, self)
         # http://sqlite.1065341.n5.nabble.com/floor-help-td46158.html
         return Column(dtype='FLOAT',
-                sql_string=f'( ROUND(({value_to_sql_string(l)} / {value_to_sql_string(self)}) - 0.5) )',
-                is_direct_column=False)
+                sql_string=f'( ROUND(({value_to_sql_string(l)} / {value_to_sql_string(self)}) - 0.5) )')
 
     def __lt__(self,other):
         return create_column_from_operation(self, other, 'BOOL', '<')
@@ -142,16 +135,14 @@ class Column:
         if self.dtype != 'BOOL':
             raise Exception(f'tilde support only bool columns, got: {self.dtype}')
         return Column(dtype='BOOL',
-                sql_string=f'(NOT({value_to_sql_string(self)}))',
-                is_direct_column=False)
+                sql_string=f'(NOT({value_to_sql_string(self)}))')
 
     def __abs__(self):
         t = get_type(self)
         if not is_numeric_type(t):
             raise Exception(f'abs support only numeric columns, got: {str(t)}')
         return Column(dtype=t,
-                    sql_string=f'ABS({value_to_sql_string(self)})',
-                    is_direct_column=False)  
+                    sql_string=f'ABS({value_to_sql_string(self)})')  
 
     def __neg__(self):
         t = get_type(self)
@@ -160,8 +151,7 @@ class Column:
         elif t == 'BOOL': sql_string = f'(NOT({value_to_sql_string(self)}))'
         else: raise Exception(f'- support only numeric and bool columns, got: {str(t)}')
         return Column(dtype=t,
-                    sql_string=sql_string,
-                    is_direct_column=False)  
+                    sql_string=sql_string)  
        
 
 

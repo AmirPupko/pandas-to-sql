@@ -38,9 +38,9 @@ class GroupedTable:
 
     def agg(self, v):
         if isinstance(v, str):
-            return agg(self, dict(zip(self.table.columns.keys(), v)))
+            return self.agg(dict(zip(self.table.columns.keys(), v)))
         elif isinstance(v, list):
-            return agg(self, dict(zip(self.table.columns.keys(), v)))
+            return self.agg(dict(zip(self.table.columns.keys(), v)))
         elif isinstance(v, dict):
             if len( set(v.keys()) & set(self.groupings.keys()) ) > 0:
                 raise Exception("grouped table doesnt support same column in 'on' and 'select'")
@@ -85,8 +85,7 @@ class GroupedTable:
                     if operation=='group_concat':
                         new_sql_string = f"{operation}({column.sql_string},'{join_str_seperator}')"
                     groupby_select_columns[new_column_name] = Column(dtype=dtype,
-                                            sql_string=new_sql_string,
-                                            is_direct_column=False)
+                                            sql_string=new_sql_string)
             groupby_select_columns.update(self.groupings)
             
             self_table_copy.columns = groupby_select_columns
@@ -95,8 +94,7 @@ class GroupedTable:
             new_table_columns = {}
             for k in groupby_select_columns.keys():
                 new_table_columns[k] = Column(dtype=groupby_select_columns[k].dtype,
-                                        sql_string=k,
-                                        is_direct_column=True)
+                                        sql_string=k)
 
             grouping_field = ', '.join(list(map(lambda k: self.groupings[k].sql_string, self.groupings.keys())))
 
