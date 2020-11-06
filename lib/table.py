@@ -6,17 +6,17 @@ class Table:
     table_name = None
     columns = None
     filters = None
-    sql_string = None
+    from_sql_string = None
     had_changed = None
     
     '''
         column_dtype_map: ...
     '''
-    def __init__(self, table_name, column_dtype_map={}, sql_string=None, filters=[], columns=None, had_changed=False):
+    def __init__(self, table_name, column_dtype_map={}, from_sql_string=None, filters=[], columns=None, had_changed=False):
         self.table_name = table_name
         self.columns = {}
         self.filters = filters
-        self.sql_string = sql_string
+        self.from_sql_string = from_sql_string
         self.had_changed = had_changed
         if columns:
             self.columns = columns
@@ -51,7 +51,7 @@ class Table:
     
     def __copy__(self):
         result_table = Table(table_name=self.table_name,
-                             sql_string=self.sql_string, 
+                             from_sql_string=self.from_sql_string, 
                              had_changed=self.had_changed,
                              filters=[])
         for c in self.columns.keys(): result_table[c] = self[c] # column deep copy will occur in __getitem__
@@ -131,7 +131,7 @@ class Table:
         return Table(table_name='Temp',
                     columns=new_table_columns,
                     filters=[],
-                    sql_string=new_table_sql_string)
+                    from_sql_string=new_table_sql_string)
 
     def groupby(self, by):
         def __get_column_key(col):
@@ -156,13 +156,13 @@ class Table:
         return GroupedTable(copy(self), groupings=groupings)
         
     def get_sql_string(self):
-        if self.sql_string and not self.had_changed:
-            return self.sql_string
+        if self.from_sql_string and not self.had_changed:
+            return self.from_sql_string
         
         from_field = None
         selected_fields = None
-        if self.sql_string:
-            from_field = f'({self.sql_string}) AS {self.table_name}'
+        if self.from_sql_string:
+            from_field = f'({self.from_sql_string}) AS {self.table_name}'
         else:
             from_field = self.table_name
 

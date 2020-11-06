@@ -35,6 +35,6 @@ def concat(objs, axis=0):
     return Table(table_name='Temp',
                         columns=copy(objs[0]).columns,
                         filters=[],
-                        sql_string=new_table_sql_string)
+                        from_sql_string=new_table_sql_string)
 
 

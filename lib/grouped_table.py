@@ -103,5 +103,5 @@ class GroupedTable:
                          columns=new_table_columns,
                          filters=[],
                          had_changed=False,
-                         sql_string=f'{self_table_copy.get_sql_string()} GROUP BY {grouping_field}')
+                         from_sql_string=f'{self_table_copy.get_sql_string()} GROUP BY {grouping_field}')
 
