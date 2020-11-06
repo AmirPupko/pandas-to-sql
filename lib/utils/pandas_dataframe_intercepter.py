@@ -116,7 +116,7 @@ class PandasDataFrameIntercepter:
         return PandasDataFrameIntercepter.run_operation_and_return(self, other, operator.ne)
 
     def __abs__(self):
-        return PandasDataFrameIntercepter.run_operation_single_and_return(self, abs)
+        return PandasDataFrameIntercepter.run_operation_single_and_return(self, operator.abs)
         
     def __neg__(self):
         return PandasDataFrameIntercepter.run_operation_single_and_return(self, operator.neg)

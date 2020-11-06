@@ -85,42 +85,60 @@ class Table:
     def merge(self, right, how='inner', on=None, left_on=None, right_on=None):
         if not isinstance(right, Table):
             raise Exception("merge expects right to be of type: %s, got: %s" %  (str(type(Table)), str(type(right))))
-        if how not in ['left', 'right', 'inner']:
-            raise Exception("merge 'how' value must be in [‘left’, ‘right’, ‘inner’]")
-        if on is not None and left_on is None and right_on is None:
-            left = copy(self)
-            right = copy(right)
-            if len(set(left.columns.keys()) & set(right.columns.keys())) > 1:
-                raise Exception("merge got duplicates columns in both tables (except 'on' value)")
-            if on not in left.columns or on not in right.columns:
-                raise Exception("merge 'on' value must be in both tables as column")
-            
-            # creating new table columns
+        if how not in ['left', 'inner']:
+            raise Exception("merge 'how' value must be in [‘left’, ‘inner’]")
+
+        left = copy(self)
+        right = copy(right)
+        if len(set(left.columns.keys()) & set(right.columns.keys())) > 1:
+            raise Exception("merge got duplicates columns in both tables (except 'on' value)")
+        
+        def __get_new_table_columns(left, right):
             left_columns = dict(zip(left.columns.keys(), map(lambda x: left[x], left.columns.keys())))
             right_columns = dict(zip(right.columns.keys(), map(lambda x: right[x], right.columns.keys())))
-            right_columns.pop(on)
-            new_table_columns = {**left_columns, **right_columns}
-
-            # creating new table sql string
-            single_select_field_format = 't1.%s AS %s'
-            selected_fields_left = ', '.join(list(map(lambda x: single_select_field_format % (x, x), left.columns.keys())))
-            single_select_field_format = 't2.%s AS %s'
-            selected_fields_right = ', '.join(list(map(lambda x: single_select_field_format % (x, x), filter(lambda x: x!=on, right.columns.keys()))))
-            selected_fields = selected_fields_left
-            if selected_fields_right:
-                selected_fields += ', ' + selected_fields_right
-            new_table_sql_string = f'SELECT {selected_fields} FROM ({left.get_sql_string()}) AS t1 {how.upper()} JOIN ({right.get_sql_string()}) AS t2 ON t1.{on}=t2.{on}'
-            
-            return Table(table_name='Temp',
-                         columns=new_table_columns,
-                         filters=[],
-                         sql_string=new_table_sql_string)
+            return left_columns, right_columns
         
-        elif on is None and (left_on is not None and right_on is not None):
-            raise Exception('TODO: support left_on right_on for merge')
+        left_on_column = None
+        right_on_column = None
+        if on and not left_on and not right_on:
+            left_on_column = on
+            right_on_column = on
+        elif left_on and right_on and not on:
+            left_on_column = left_on
+            right_on_column = right_on
         else:
-            raise Exception('merge supports: on OR left_on + right_on. cant have both or missing values')
-    
+            raise Exception("got unexpected on/left_on/right_on values.")
+
+        if not isinstance(left_on_column, str) or \
+            not isinstance(right_on_column, str):
+            raise Exception("'on/left_on/right_on' must be str")
+        
+        if left_on_column not in left.columns or right_on_column not in right.columns:
+            raise Exception("merge 'on/left_on/right_on' value must be in both tables as column")
+        
+        left_columns, right_columns = __get_new_table_columns(left, right)
+        if left_on_column == right_on_column:
+            right_columns.pop(on)
+        new_table_columns = {**left_columns, **right_columns}
+
+        # creating new table sql string
+        single_select_field_format = 't1.%s AS %s'
+        selected_fields_left = ', '.join(list(map(lambda x: single_select_field_format % (x, x), left_columns.keys())))
+        
+        single_select_field_format = 't2.%s AS %s'
+        selected_fields_right = ', '.join(list(map(lambda x: single_select_field_format % (x, x), right_columns.keys())))
+        
+        selected_fields = selected_fields_left
+        if selected_fields_right:
+            selected_fields += ', ' + selected_fields_right
+        
+        new_table_sql_string = f'SELECT {selected_fields} FROM ({left.get_sql_string()}) AS t1 {how.upper()} JOIN ({right.get_sql_string()}) AS t2 ON t1.{left_on_column}=t2.{right_on_column}'
+        
+        return Table(table_name='Temp',
+                    columns=new_table_columns,
+                    filters=[],
+                    sql_string=new_table_sql_string)
+
     def groupby(self, by):
         def __get_column_key(col):
             for k in self.columns.keys():
@@ -150,19 +168,18 @@ class Table:
         from_field = None
         selected_fields = None
         if self.sql_string:
-            from_field = '(%s) AS %s' % (self.sql_string, self.table_name)
+            from_field = f'({self.sql_string}) AS {self.table_name}'
         else:
             from_field = self.table_name
 
-#         print(self.columns.keys())
-#         print(list(map(lambda x: x.sql_string, self.columns.values())))
         single_select_field_format = '(%s) AS %s'
-        selected_fields = ', '.join(list(map(lambda x: single_select_field_format % (self[x].sql_string, x if self[x].is_direct_column else "'"+x+"'"), self.columns.keys())))
+        selected_fields = ', '.join(list(map(lambda x: single_select_field_format % (self[x].sql_string, x if self[x].is_direct_column else f"'{x}'"), self.columns.keys())))
 
         single_where_field_format = '(%s)'
         where_cond = ' AND '.join(list(map(lambda c: single_where_field_format % (c.sql_string), self.filters)))
         
-        if where_cond == '':
-            return f'SELECT {selected_fields} FROM {from_field}'
-        else:
+        if where_cond:
             return f'SELECT {selected_fields} FROM {from_field} WHERE {where_cond} '
+        else:
+            return f'SELECT {selected_fields} FROM {from_field}'
+            
