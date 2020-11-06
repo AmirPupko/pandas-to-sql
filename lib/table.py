@@ -93,11 +93,6 @@ class Table:
         if len(set(left.columns.keys()) & set(right.columns.keys())) > 1:
             raise Exception("merge got duplicates columns in both tables (except 'on' value)")
         
-        def __get_new_table_columns(left, right):
-            left_columns = dict(zip(left.columns.keys(), map(lambda x: left[x], left.columns.keys())))
-            right_columns = dict(zip(right.columns.keys(), map(lambda x: right[x], right.columns.keys())))
-            return left_columns, right_columns
-        
         left_on_column = None
         right_on_column = None
         if on and not left_on and not right_on:
@@ -116,7 +111,10 @@ class Table:
         if left_on_column not in left.columns or right_on_column not in right.columns:
             raise Exception("merge 'on/left_on/right_on' value must be in both tables as column")
         
-        left_columns, right_columns = __get_new_table_columns(left, right)
+        left_columns = dict(zip(left.columns.keys(), map(lambda x: left[x], left.columns.keys())))
+        right_columns = dict(zip(right.columns.keys(), map(lambda x: right[x], right.columns.keys())))
+
+        # creating new table columns
         if left_on_column == right_on_column:
             right_columns.pop(on)
         new_table_columns = {**left_columns, **right_columns}
