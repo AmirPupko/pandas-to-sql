@@ -9,21 +9,12 @@ class Table:
     from_sql_string = None
     had_changed = None
     
-    '''
-        column_dtype_map: ...
-    '''
-    def __init__(self, table_name, column_dtype_map={}, from_sql_string=None, filters=[], columns=None, had_changed=False):
+    def __init__(self, table_name, columns, from_sql_string, filters,  had_changed):
         self.table_name = table_name
-        self.columns = {}
+        self.columns = columns
         self.filters = filters
         self.from_sql_string = from_sql_string
         self.had_changed = had_changed
-        if columns:
-            self.columns = columns
-        else:
-            for column_name in column_dtype_map.keys():
-                self[column_name] = Column(dtype=column_dtype_map[column_name], 
-                                          sql_string=column_name)
 
     def __getitem__(self, key):
         if isinstance(key, Column):
@@ -50,12 +41,18 @@ class Table:
         return self[attribute_name]
     
     def __copy__(self):
-        result_table = Table(table_name=self.table_name,
+        columns_copy = {}
+        for c in self.columns.keys(): 
+            columns_copy[c] = self[c]  # column deep copy will occur in __getitem__
+        
+        filters_copy = []
+        for f in self.filters: filters_copy.append(copy(f))
+
+        result_table = create_table(table_name=self.table_name,
                              from_sql_string=self.from_sql_string, 
                              had_changed=self.had_changed,
-                             filters=[])
-        for c in self.columns.keys(): result_table[c] = self[c] # column deep copy will occur in __getitem__
-        for f in self.filters: result_table.filters.append(copy(f))
+                             columns=columns_copy,
+                             filters=filters_copy)
         return result_table
 
     def reset_index(self, level=None, drop=False, inplace=False, col_level=0, col_fill=''):
@@ -128,9 +125,8 @@ class Table:
         
         new_table_sql_string = f'SELECT {selected_fields} FROM ({left.get_sql_string()}) AS t1 {how.upper()} JOIN ({right.get_sql_string()}) AS t2 ON t1.{left_on_column}=t2.{right_on_column}'
         
-        return Table(table_name='Temp',
+        return create_table(table_name='Temp',
                     columns=new_table_columns,
-                    filters=[],
                     from_sql_string=new_table_sql_string)
 
     def groupby(self, by):
@@ -177,3 +173,20 @@ class Table:
         else:
             return f'SELECT {selected_fields} FROM {from_field}'
             
+
+
+
+def create_table_from_schema(table_name, schema) -> Table:
+    columns = {}
+    for column_name in schema.keys():
+        columns[column_name] = Column(dtype=schema[column_name], 
+                                    sql_string=column_name)
+    return create_table(table_name=table_name, columns=columns)
+
+def create_table(table_name, columns={}, from_sql_string=None, filters=[], had_changed=False) -> Table:
+    return Table(
+        table_name=table_name,
+        columns=columns,
+        from_sql_string=from_sql_string,
+        filters=filters,
+        had_changed=had_changed)

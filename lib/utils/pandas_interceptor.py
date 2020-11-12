@@ -1,7 +1,7 @@
 from copy import copy
 import operator
 from lib.utils.pandas_dataframe_intercepter import PandasDataFrameIntercepter
-from lib.table import Table
+from lib.table import create_table, Table
 
 class PandasIntercepter:
     def __init__(self, pandas):
@@ -32,9 +32,8 @@ def concat(objs, axis=0):
     
     all_tables_sql_string = list(map(lambda x: x.get_sql_string(), objs))
     new_table_sql_string = ' UNION ALL '.join(all_tables_sql_string)
-    return Table(table_name='Temp',
+    return create_table(table_name='Temp',
                         columns=copy(objs[0]).columns,
-                        filters=[],
                         from_sql_string=new_table_sql_string)
 
 

@@ -18,5 +18,5 @@ def assert_(df):
         df_expected = df.df_pandas
         assert_dataframes_equals(df_expected, df_actual)
     except Exception as e:
-        print(actual_query_string)
+        # print(actual_query_string)
         raise e

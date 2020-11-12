@@ -97,11 +97,10 @@ class GroupedTable:
                                         sql_string=k)
 
             grouping_field = ', '.join(list(map(lambda k: self.groupings[k].sql_string, self.groupings.keys())))
-
-            from lib.table import Table
-            return Table(table_name='Temp',
+            
+            from lib.table import create_table
+            return create_table(table_name='Temp',
                          columns=new_table_columns,
-                         filters=[],
-                         had_changed=False,
-                         from_sql_string=f'{self_table_copy.get_sql_string()} GROUP BY {grouping_field}')
+                         from_sql_string=f'{self_table_copy.get_sql_string()} GROUP BY {grouping_field}',
+                         had_changed=False)
 
