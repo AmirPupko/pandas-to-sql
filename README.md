@@ -1,10 +1,9 @@
 
-simple run:  
-python main.py  
+example run:  
+python example_runner.py  
 
 tests:  
-pytest ./lib  
-with console print: pytest ./lib -s  
+pytest ./pandas_to_sql  
 
 env:  
 conda env create -f environment.yml --prefix ./env  
