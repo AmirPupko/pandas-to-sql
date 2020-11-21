@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="pandas-to-sql", # Replace with your own username
-    version="0.0.1",
+    version="0.0.3",
     author="Amir",
     author_email="amirpupko@gmail.com",
     description="Convert pandas dataframe manipulations to sql query string",

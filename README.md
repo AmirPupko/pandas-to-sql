@@ -20,3 +20,7 @@ conda remove --prefix ./env --all
 ![Python Package using Conda](https://github.com/AmirPupko/pandas-to-sql/workflows/Python%20Package%20using%20Conda/badge.svg)  
 
 
+
+Package:  
+python setup.py sdist bdist_wheel  
+python -m twine upload --repository pypi --skip-existing dist/*  
