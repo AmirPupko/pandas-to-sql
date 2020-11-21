@@ -1,8 +1,8 @@
-import sys
+import os
 import setuptools
 
-v = sys.argv[3]
-sys.argv = sys.argv[:2]
+v = os.environ['RELEASE_VERSION']
+print('Version: ', v)
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
