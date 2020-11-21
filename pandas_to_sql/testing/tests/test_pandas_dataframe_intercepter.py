@@ -1,5 +1,5 @@
 import pytest
-from lib.testing.conftest import TABLE_NAME_1
+from pandas_to_sql.testing.conftest import TABLE_NAME_1
 
 def test_columns_attribute():
     expected = pytest.df1.df_pandas.columns

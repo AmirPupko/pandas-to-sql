@@ -1,8 +1,8 @@
 import pandas as pd
-from lib.table import Table
-from lib.column import Column
-from lib.grouped_table import GroupedTable
-from lib.utils.pandas_dataframe_intercepter import PandasDataFrameIntercepter
+from pandas_to_sql.table import Table
+from pandas_to_sql.column import Column
+from pandas_to_sql.grouped_table import GroupedTable
+from pandas_to_sql.utils.pandas_dataframe_intercepter import PandasDataFrameIntercepter
 from copy import copy
 
 ## Conventions

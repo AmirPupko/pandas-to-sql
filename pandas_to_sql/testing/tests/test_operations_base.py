@@ -1,5 +1,5 @@
 import pytest
-from lib.testing.utils.asserters import assert_
+from pandas_to_sql.testing.utils.asserters import assert_
 from copy import copy
 
 def test_copy():

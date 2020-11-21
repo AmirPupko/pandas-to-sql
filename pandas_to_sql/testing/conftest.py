@@ -3,7 +3,7 @@ from copy import copy
 import sqlite3
 import pytest
 import pandas_to_sql
-from lib.testing.utils import fake_data_creation
+from pandas_to_sql.testing.utils import fake_data_creation
 
 sql_connection = sqlite3.connect('./example.db') #create db
 

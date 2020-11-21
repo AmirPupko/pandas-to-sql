@@ -4,3 +4,6 @@ example.db
 .vscode/
 **/env/*
 local/*
+build/*
+dist/*
+**.egg-info

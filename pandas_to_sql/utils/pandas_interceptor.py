@@ -1,7 +1,7 @@
 from copy import copy
 import operator
-from lib.utils.pandas_dataframe_intercepter import PandasDataFrameIntercepter
-from lib.table import create_table, Table
+from pandas_to_sql.utils.pandas_dataframe_intercepter import PandasDataFrameIntercepter
+from pandas_to_sql.table import create_table, Table
 
 class PandasIntercepter:
     def __init__(self, pandas):
