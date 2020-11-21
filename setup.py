@@ -1,11 +1,14 @@
+import sys
 import setuptools
+
+v = sys.argv[3]
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name="pandas-to-sql", # Replace with your own username
-    version="0.0.3",
+    version=v,
     author="Amir",
     author_email="amirpupko@gmail.com",
     description="Convert pandas dataframe manipulations to sql query string",
