@@ -17,8 +17,8 @@ conda remove --prefix ./env --all
 
 
 
-![Python Package using Conda](https://github.com/AmirPupko/pandas-to-sql/workflows/Python%20Package%20using%20Conda/badge.svg)  
-![Upload Python Package](https://github.com/AmirPupko/pandas-to-sql/workflows/Upload%20Python%20Package/badge.svg?event=deployment)  
+![Python Package using Conda](https://github.com/AmirPupko/pandas-to-sql/workflows/Python%20Package%20using%20Conda/badge.svg)    
+![Upload Python Package](https://github.com/AmirPupko/pandas-to-sql/workflows/Upload%20Python%20Package/badge.svg?event=release)  
 
 
 
