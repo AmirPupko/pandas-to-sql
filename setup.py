@@ -2,6 +2,7 @@ import sys
 import setuptools
 
 v = sys.argv[3]
+sys.argv = sys.argv[:2]
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
