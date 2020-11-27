@@ -1,7 +1,7 @@
 import pandas as pd
-from pandas_to_sql.table import Table
-from pandas_to_sql.column import Column
-from pandas_to_sql.grouped_table import GroupedTable
+from pandas_to_sql.engine.table import Table
+from pandas_to_sql.engine.column import Column
+from pandas_to_sql.engine.grouped_table import GroupedTable
 from pandas_to_sql.utils.pandas_dataframe_intercepter import PandasDataFrameIntercepter
 from copy import copy
 

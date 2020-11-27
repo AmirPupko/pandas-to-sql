@@ -1,5 +1,5 @@
 from copy import copy
-from pandas_to_sql.column import Column
+from pandas_to_sql.engine.column import Column
 
 class GroupedTable:
     table = None
@@ -98,7 +98,7 @@ class GroupedTable:
 
             grouping_field = ', '.join(list(map(lambda k: self.groupings[k].sql_string, self.groupings.keys())))
             
-            from pandas_to_sql.table import create_table
+            from pandas_to_sql.engine.table import create_table
             return create_table(table_name='Temp',
                          columns=new_table_columns,
                          from_sql_string=f'{self_table_copy.get_sql_string()} GROUP BY {grouping_field}',

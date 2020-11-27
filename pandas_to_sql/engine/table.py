@@ -1,5 +1,5 @@
-from pandas_to_sql.column import Column
-from pandas_to_sql.grouped_table import GroupedTable
+from pandas_to_sql.engine.column import Column
+from pandas_to_sql.engine.grouped_table import GroupedTable
 from copy import copy
 
 class Table:

@@ -1,4 +1,4 @@
-from pandas_to_sql.table import create_table_from_schema
+from pandas_to_sql.engine.table import create_table_from_schema
 from pandas_to_sql.utils.helpers import  create_schema_from_df
 from pandas_to_sql.utils.pandas_dataframe_intercepter import PandasDataFrameIntercepter
 from pandas_to_sql.utils.pandas_interceptor import PandasIntercepter
