@@ -1,6 +1,8 @@
-from pandas_to_sql.engine.column import Column
-from pandas_to_sql.engine.grouped_table import GroupedTable
 from copy import copy
+from pandas_to_sql.engine.columns.column import Column
+from pandas_to_sql.engine.grouped_table import GroupedTable
+from pandas_to_sql.engine.columns.common import get_column_class_from_type
+
 
 class Table:
     table_name = None
@@ -32,7 +34,7 @@ class Table:
         return c
 
     def __setitem__(self, key, newvalue):
-        if not isinstance(newvalue, Column):
+        if not isinstance(newvalue, Column) and not issubclass(type(newvalue), Column):
             raise Exception('trying to set table column with wrong type. expected type: %s, got type: %s' % (str(type(Column)), str(type(newvalue))))
         self.had_changed = True
         self.columns[key] = newvalue
@@ -172,15 +174,14 @@ class Table:
             return f'SELECT {selected_fields} FROM {from_field} WHERE {where_cond} '
         else:
             return f'SELECT {selected_fields} FROM {from_field}'
-            
+
 
 
 
 def create_table_from_schema(table_name, schema) -> Table:
     columns = {}
     for column_name in schema.keys():
-        columns[column_name] = Column(dtype=schema[column_name], 
-                                    sql_string=column_name)
+        columns[column_name] = get_column_class_from_type(schema[column_name])(sql_string=column_name)
     return create_table(table_name=table_name, columns=columns)
 
 def create_table(table_name, columns={}, from_sql_string=None, filters=[], had_changed=False) -> Table:

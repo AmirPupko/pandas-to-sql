@@ -1,5 +1,6 @@
 from copy import copy
-from pandas_to_sql.engine.column import Column
+from pandas_to_sql.engine.columns.column import Column
+from pandas_to_sql.engine.columns.common import get_column_class_from_type
 
 class GroupedTable:
     table = None
@@ -68,6 +69,7 @@ class GroupedTable:
                     operation = operation.lower()
                     
                     if operation=='mean':
+                        dtype = 'FLOAT'
                         operation = 'avg'
                         operation_column_name_override = 'mean'    
                     elif operation=='sum' and column.dtype=='VARCHAR':
@@ -84,8 +86,8 @@ class GroupedTable:
                     new_sql_string = f'{operation}({column.sql_string})'
                     if operation=='group_concat':
                         new_sql_string = f"{operation}({column.sql_string},'{join_str_seperator}')"
-                    groupby_select_columns[new_column_name] = Column(dtype=dtype,
-                                            sql_string=new_sql_string)
+                    t = get_column_class_from_type(dtype)
+                    groupby_select_columns[new_column_name] = t(sql_string=new_sql_string)
             groupby_select_columns.update(self.groupings)
             
             self_table_copy.columns = groupby_select_columns
@@ -93,8 +95,8 @@ class GroupedTable:
             # create new table columns
             new_table_columns = {}
             for k in groupby_select_columns.keys():
-                new_table_columns[k] = Column(dtype=groupby_select_columns[k].dtype,
-                                        sql_string=k)
+                t = get_column_class_from_type(groupby_select_columns[k].dtype)
+                new_table_columns[k] = t(sql_string=k)
 
             grouping_field = ', '.join(list(map(lambda k: self.groupings[k].sql_string, self.groupings.keys())))
             

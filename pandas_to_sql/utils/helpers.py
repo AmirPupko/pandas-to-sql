@@ -1,6 +1,5 @@
 import pandas as pd
 from pandas_to_sql.engine.table import Table
-from pandas_to_sql.engine.column import Column
 from pandas_to_sql.engine.grouped_table import GroupedTable
 from pandas_to_sql.utils.pandas_dataframe_intercepter import PandasDataFrameIntercepter
 from copy import copy
@@ -29,6 +28,7 @@ def convert_df_type(col_type):
     elif pd.api.types.is_string_dtype(col_type): return 'VARCHAR'
     elif pd.api.types.is_datetime64_any_dtype(col_type): return 'TIMESTAMP'
     else: raise Exception(f"could not convert column type. got: {str(col_type)}")
+
 
 def create_schema_from_df(df):        
     schema = {}

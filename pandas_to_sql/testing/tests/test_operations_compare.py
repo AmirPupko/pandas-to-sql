@@ -12,9 +12,14 @@ def test_gt2():
     df['new_value'] = df.random_int > 3
     assert_(df)
 
-def test_abs():
+def test_abs_float():
     df = pytest.df1
     df['new_value'] = abs(df.random_float)
+    assert_(df)
+
+def test_abs_int():
+    df = pytest.df1
+    df['new_value'] = abs(df.random_int)
     assert_(df)
 
 def test_ge():
