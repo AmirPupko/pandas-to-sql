@@ -2,7 +2,7 @@
 from copy import copy
 import sqlite3
 import pytest
-import pandas_to_sql
+from pandas_to_sql import wrap_df
 from pandas_to_sql.testing.utils import fake_data_creation
 
 sql_connection = sqlite3.connect('./example.db') #create db
@@ -24,7 +24,7 @@ def pytest_configure():
 @pytest.fixture(scope="function", autouse=True)
 def run_around_tests():
     # print('\nhere\n')
-    pytest.df1 = pandas_to_sql.wrap_df(copy(DF1), TABLE_NAME_1)
-    pytest.df2 = pandas_to_sql.wrap_df(copy(DF2), TABLE_NAME_2)
+    pytest.df1 = wrap_df(copy(DF1), TABLE_NAME_1)
+    pytest.df2 = wrap_df(copy(DF2), TABLE_NAME_2)
     yield
     # run after function

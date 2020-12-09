@@ -9,8 +9,8 @@ class PandasDataFrameIntercepter:
     def __repr__(self):
         return self.df_pandas.__repr__()
 
-    def __format__(self):
-        return self.df_pandas.__format__()
+    def __format__(self, fmt):
+        return self.df_pandas.__format__(fmt)
 
     def __str__(self):
         return self.df_pandas.__str__()
