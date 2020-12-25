@@ -1,7 +1,7 @@
 from copy import copy
 from pandas_to_sql.engine.columns.column import Column
 from pandas_to_sql.engine.grouped_table import GroupedTable
-from pandas_to_sql.engine.columns.common import get_column_class_from_type
+from pandas_to_sql.engine.columns.common import get_column_class_from_type, create_column_from_value
 
 
 class Table:
@@ -34,10 +34,12 @@ class Table:
         return c
 
     def __setitem__(self, key, newvalue):
-        if not isinstance(newvalue, Column) and not issubclass(type(newvalue), Column):
-            raise Exception('trying to set table column with wrong type. expected type: %s, got type: %s' % (str(type(Column)), str(type(newvalue))))
-        self.had_changed = True
-        self.columns[key] = newvalue
+        if isinstance(newvalue, Column) or issubclass(type(newvalue), Column):
+            self.columns[key] = newvalue
+            self.had_changed = True
+        else:            
+            self.columns[key] = create_column_from_value(newvalue)
+            self.had_changed = True
     
     def __getattr__(self, attribute_name):
         return self[attribute_name]

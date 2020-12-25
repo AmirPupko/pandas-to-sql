@@ -1,6 +1,7 @@
 
 import numbers
 import operator
+from datetime import datetime
 from pandas_to_sql.engine.columns.column import Column
 
 
@@ -22,10 +23,26 @@ def value_to_sql_string(value):
         return str(value)
     elif isinstance(value, str):
         return "'" + value + "'"
+    elif isinstance(value, datetime):
+        return f"datetime('{value.strftime('%Y-%m-%d %H:%M:%S')}')"
     elif isinstance(value, Column):
         return value.sql_string
     raise Exception(f"Value not supported. supporting: premitives and {str(Column)}. got {str(type(value))}")
 
+
+def create_column_from_value(v):
+    from pandas_to_sql.engine.columns.bool_column import BoolColumn
+    from pandas_to_sql.engine.columns.str_column import StrColumn
+    from pandas_to_sql.engine.columns.timestamp_column import TimestampColumn
+    from pandas_to_sql.engine.columns.numeric_columns import IntColumn, FloatColumn
+    sql_string = value_to_sql_string(v)
+    if isinstance(v, int): return IntColumn(sql_string)
+    if isinstance(v, float): return FloatColumn(sql_string)
+    if isinstance(v, str): return StrColumn(sql_string)
+    if isinstance(v, bool): return BoolColumn(sql_string)
+    if isinstance(v, datetime): return TimestampColumn(sql_string)
+    
+    raise Exception(f'trying to set table column with unsupported type. expected types are Column or primitives. got type: {str(type(newvalue))}' )
 
 def create_column_from_operation(l, r, dtype, op):
     return dtype(sql_string=f'({value_to_sql_string(l)} {op} {value_to_sql_string(r)})')  
