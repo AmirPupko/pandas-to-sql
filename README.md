@@ -4,9 +4,9 @@
 Convert [pandas DataFrame](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html) manipulations to sql query string.
 
 
-![tests](https://github.com/AmirPupko/pandas-to-sql/workflows/Python%20Package%20using%20Conda/badge.svg)
+![Tests](https://github.com/AmirPupko/pandas-to-sql/workflows/Tests/badge.svg)
 
-![release](https://github.com/AmirPupko/pandas-to-sql/workflows/Upload%20Python%20Package/badge.svg)
+![Publish to PyPI](https://github.com/AmirPupko/pandas-to-sql/workflows/Publish%20to%20PyPI/badge.svg)
 
 ###
 Here is an [Example Notebook](https://colab.research.google.com/drive/1A9_JWUVLYuIAVY3naynutMLqjxLKA03L?usp=sharing) 
