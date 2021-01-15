@@ -1,6 +1,6 @@
 import pytest
 from pandas_to_sql.testing.utils.asserters import assert_
-from pandas_to_sql.utils.helpers import flatten_grouped_dataframe
+from pandas_to_sql.conventions import flatten_grouped_dataframe
 
 
 

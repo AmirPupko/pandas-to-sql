@@ -1,7 +1,6 @@
 from datetime import timedelta, datetime
 import pytest
 from pandas_to_sql.testing.utils.asserters import assert_, get_expected_and_actual
-from pandas_to_sql.utils.helpers import flatten_grouped_dataframe
 from copy import copy
 import pandas as pd
 import pandas_to_sql 

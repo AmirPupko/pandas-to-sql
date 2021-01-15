@@ -1,7 +1,7 @@
 from copy import copy
 import pandas_to_sql
 from pandas_to_sql.testing.utils.fake_data_creation import create_fake_dataset
-from pandas_to_sql.utils.helpers import flatten_grouped_dataframe
+from pandas_to_sql.conventions import flatten_grouped_dataframe
 
 table_name = 'random_data'
 df, _ = create_fake_dataset()
