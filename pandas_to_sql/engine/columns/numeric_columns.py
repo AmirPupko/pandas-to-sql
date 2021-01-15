@@ -65,7 +65,19 @@ def __neg__(self):
 
 
 def round_(self):
-    return FloatColumn(sql_string=f'(ROUND({value_to_sql_string(self)}))')
+    # https://docs.python.org/3/library/functions.html#round
+    v = value_to_sql_string(self)
+    integer_part = f'(CAST({v} AS INT))'
+    fractional_part = f'(ABS({v}) - ROUND(ABS({v})-0.5))'
+
+    is_integer_part_even = f'({integer_part}%2 == 0)'
+    is_fractional_part_exactly_half = f'({fractional_part}==.5)'
+
+    simple_round = f'(ROUND({v}))'
+    round_with_change = f'(CASE WHEN {v}>0 THEN ROUND({v}-0.001) ELSE ROUND({v}+0.001) END)'
+
+    s = f'(CASE WHEN {is_fractional_part_exactly_half} AND {is_integer_part_even} THEN {round_with_change} ELSE {simple_round} END)'
+    return FloatColumn(sql_string=s)
 
 
 

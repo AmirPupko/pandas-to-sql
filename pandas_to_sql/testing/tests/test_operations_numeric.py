@@ -78,3 +78,19 @@ def test_round():
     df = pytest.df1
     df['new_value'] = df.random_float.round()
     assert_(df)
+
+def test_round_with_half_values():
+    df = pytest.df1
+    df['a'] = 0.5
+    df['b'] = 1.5
+    df['c'] = 2.5
+    df['d'] = 3.5
+    df['e'] = -0.5
+    df['f'] = -1.5
+    df['g'] = -2.5
+    df['h'] = -3.5
+
+    for c in ['a','b','c','d','e','f','g','h']:
+        df[c + '_new'] = df[c].round()
+    
+    assert_(df)
