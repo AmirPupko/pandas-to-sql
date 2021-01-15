@@ -64,6 +64,10 @@ def __neg__(self):
     return type(self)(sql_string=f'(-({value_to_sql_string(self)}))')
 
 
+def round_(self):
+    return FloatColumn(sql_string=f'(ROUND({value_to_sql_string(self)}))')
+
+
 
 add_comparison_operators_to_class(FloatColumn)
 FloatColumn.__add__ = __add__
@@ -78,6 +82,7 @@ FloatColumn.__truediv__ = __truediv__
 FloatColumn.__rtruediv__ = __rtruediv__
 FloatColumn.__abs__ = __abs__
 FloatColumn.__neg__ = __neg__
+FloatColumn.round = round_
 
 
 add_comparison_operators_to_class(IntColumn)
@@ -93,4 +98,4 @@ IntColumn.__truediv__ = __truediv__
 IntColumn.__rtruediv__ = __rtruediv__
 IntColumn.__abs__ = __abs__
 IntColumn.__neg__ = __neg__
-
+IntColumn.round = round_

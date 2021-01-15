@@ -73,3 +73,8 @@ def test_rfloordiv():
     df = pytest.df1
     df['new_value'] = 1 // df.random_float
     assert_(df)
+
+def test_round():
+    df = pytest.df1
+    df['new_value'] = df.random_float.round()
+    assert_(df)
