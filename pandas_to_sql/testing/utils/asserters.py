@@ -24,4 +24,9 @@ def get_expected_and_actual(df):
 
 def assert_(df):
     df_expected, df_actual = get_expected_and_actual(df)
+
+    # i = df_expected.new_value != df_actual.new_value
+    # a=df_expected[i][:3]
+    # b=df_expected[i][:3]
+
     assert_dataframes_equals(df_expected, df_actual)
