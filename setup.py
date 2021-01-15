@@ -1,6 +1,7 @@
 import os
 import setuptools
 
+
 v = os.environ['RELEASE_VERSION']
 print('Version: ', v)
 
