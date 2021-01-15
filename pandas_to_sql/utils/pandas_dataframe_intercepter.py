@@ -33,11 +33,11 @@ class PandasDataFrameIntercepter:
         if name in ['df_pandas', 'df_sql_convert_table']:
             return object.__getattribute__(self, name)
         
-        df_sql_convert_table_attr =  object.__getattribute__(self.df_sql_convert_table, name)
+        df_sql_convert_table_attr =  self.df_sql_convert_table.__getattribute__(name)
         if name=='get_sql_string' and hasattr(df_sql_convert_table_attr, '__call__'):
             return lambda *args, **kwargs: df_sql_convert_table_attr(*args, **kwargs)
 
-        df_pandas_attr =  object.__getattribute__(self.df_pandas, name)
+        df_pandas_attr =  self.df_pandas.__getattribute__(name)
         if name=='columns' and not hasattr(df_pandas_attr, '__call__'):
             return df_pandas_attr
               
