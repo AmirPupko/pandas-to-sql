@@ -68,6 +68,12 @@ def add_comparison_operators_to_class(class_type):
 
     def __ne__(self,other):
         return create_column_from_operation(self, other, BoolColumn, '<>')
+    
+    def __and__(self,other):
+        return create_column_from_operation(self, other, BoolColumn, 'AND')
+    
+    def __or__(self,other):
+        return create_column_from_operation(self, other, BoolColumn, 'OR')
 
     class_type.__lt__ = __lt__
     class_type.__gt__ = __gt__
@@ -75,3 +81,5 @@ def add_comparison_operators_to_class(class_type):
     class_type.__ge__ = __ge__
     class_type.__eq__ = __eq__
     class_type.__ne__ = __ne__
+    class_type.__and__ = __and__
+    class_type.__or__ = __or__

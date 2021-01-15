@@ -71,3 +71,14 @@ def test_neg_numeric():
     df = pytest.df1
     df['new_value'] = -df.random_int
     assert_(df)
+
+
+def test_two_conds_and():
+    df = pytest.df1
+    df['new_value'] = (df.random_float > 1) & (df.random_float <=2)
+    assert_(df)
+
+def test_two_conds_or():
+    df = pytest.df1
+    df['new_value'] = (df.random_float > 1) or True
+    assert_(df)
