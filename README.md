@@ -8,9 +8,9 @@ Convert [pandas DataFrame](https://pandas.pydata.org/pandas-docs/stable/referenc
 
 ![Publish to PyPI](https://github.com/AmirPupko/pandas-to-sql/workflows/Publish%20to%20PyPI/badge.svg)
 
-###
-Here is an [Example Notebook](https://colab.research.google.com/drive/1A9_JWUVLYuIAVY3naynutMLqjxLKA03L?usp=sharing) 
-  
+### try it yourself
+Here is an [Example Notebook with Colab](https://github.com/AmirPupko/pandas-to-sql/blob/main/pandas_to_sql_colab_example.ipynb) 
+
  
 ## Installation
 `pip install pandas-to=sql`
