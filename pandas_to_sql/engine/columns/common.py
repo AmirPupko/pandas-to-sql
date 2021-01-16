@@ -9,12 +9,12 @@ def get_column_class_from_type(col_type):
     from pandas_to_sql.engine.columns.bool_column import BoolColumn
     from pandas_to_sql.engine.columns.numeric_columns import IntColumn, FloatColumn
     from pandas_to_sql.engine.columns.str_column import StrColumn
-    from pandas_to_sql.engine.columns.timestamp_column import TimestampColumn
+    from pandas_to_sql.engine.columns.datetime_column import DatetimeColumn
     if col_type == 'BOOL': return BoolColumn
     elif col_type == 'INT': return IntColumn
     elif col_type == 'FLOAT': return FloatColumn
     elif col_type == 'VARCHAR': return StrColumn
-    elif col_type == 'TIMESTAMP': return TimestampColumn
+    elif col_type == 'DATETIME': return DatetimeColumn
     else: raise Exception(f"could not convert column type. got: {str(col_type)}")
 
 
@@ -33,14 +33,14 @@ def value_to_sql_string(value):
 def create_column_from_value(v):
     from pandas_to_sql.engine.columns.bool_column import BoolColumn
     from pandas_to_sql.engine.columns.str_column import StrColumn
-    from pandas_to_sql.engine.columns.timestamp_column import TimestampColumn
+    from pandas_to_sql.engine.columns.datetime_column import DatetimeColumn
     from pandas_to_sql.engine.columns.numeric_columns import IntColumn, FloatColumn
     sql_string = value_to_sql_string(v)
     if isinstance(v, int): return IntColumn(sql_string)
     if isinstance(v, float): return FloatColumn(sql_string)
     if isinstance(v, str): return StrColumn(sql_string)
     if isinstance(v, bool): return BoolColumn(sql_string)
-    if isinstance(v, datetime): return TimestampColumn(sql_string)
+    if isinstance(v, datetime): return DatetimeColumn(sql_string)
     
     raise Exception(f'trying to set table column with unsupported type. expected types are Column or primitives. got type: {str(type(newvalue))}' )
 

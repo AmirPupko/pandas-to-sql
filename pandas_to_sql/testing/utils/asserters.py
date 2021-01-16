@@ -15,9 +15,9 @@ def assert_dataframes_equals(expected, actual):
 def get_expected_and_actual(df):
     actual_query_string = df.df_sql_convert_table.get_sql_string()
     actual_columns = df.df_sql_convert_table.columns
-    timestamp_columns = [c for c in actual_columns.keys() if actual_columns[c].dtype == 'TIMESTAMP']
+    datetime_columns = [c for c in actual_columns.keys() if actual_columns[c].dtype == 'DATETIME']
 
-    df_actual = pd.read_sql_query(actual_query_string, pytest.sql_connection, parse_dates=timestamp_columns)
+    df_actual = pd.read_sql_query(actual_query_string, pytest.sql_connection, parse_dates=datetime_columns)
     df_expected = df.df_pandas
 
     return df_expected, df_actual

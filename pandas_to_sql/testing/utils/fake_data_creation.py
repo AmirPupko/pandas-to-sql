@@ -35,7 +35,7 @@ def create_fake_dataset(start=pd.to_datetime('2015-01-01'), end=pd.to_datetime('
         'random_int': 'INT',
         'random_float': 'FLOAT',
         'random_bool': 'BOOL',
-        'random_datetime': 'TIMESTAMP',
+        'random_datetime': 'DATETIME',
         'random_str': 'VARCHAR',
     }
     df['random_int'] = np.random.randint(1, 6, df_size)
