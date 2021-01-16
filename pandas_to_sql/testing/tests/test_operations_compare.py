@@ -1,4 +1,6 @@
+import pandas as pd
 import pytest
+from pandas_to_sql import wrap_df
 from pandas_to_sql.testing.utils.asserters import assert_
 
 
@@ -82,3 +84,29 @@ def test_two_conds_or():
     df = pytest.df1
     df['new_value'] = (df.random_float > 1) or True
     assert_(df)
+
+def test_fillna():
+    df = pd.DataFrame({'col':[1,None,.3,-20,None]})
+    table_name = 'some_fillna_table_name'
+    df.to_sql(table_name, pytest.sql_connection, if_exists='replace', index=False)
+    df_ = wrap_df(df, table_name)
+
+    df_['new_value'] = df_.col.fillna(2)
+    
+    assert_(df_)
+
+def test_fillna2():
+    df = pd.DataFrame({'col':[1,None,.3,-20,None]})
+    table_name = 'some_fillna_table_name'
+    df.to_sql(table_name, pytest.sql_connection, if_exists='replace', index=False)
+    df_ = wrap_df(df, table_name)
+
+    df_['new_value'] = df_.col.fillna('f')
+    
+    assert_(df_)
+
+def test_astype():
+    df = pytest.df1
+    df['new_value'] = df.random_float.astype(int)
+    assert_(df)
+

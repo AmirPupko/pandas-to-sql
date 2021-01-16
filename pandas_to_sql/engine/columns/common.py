@@ -3,7 +3,7 @@ import numbers
 import operator
 from datetime import datetime
 from pandas_to_sql.engine.columns.column import Column
-
+from pandas_to_sql.utils.helpers import convert_df_type
 
 def get_column_class_from_type(col_type):
     from pandas_to_sql.engine.columns.bool_column import BoolColumn
@@ -48,7 +48,7 @@ def create_column_from_operation(l, r, dtype, op):
     return dtype(sql_string=f'({value_to_sql_string(l)} {op} {value_to_sql_string(r)})')  
 
 
-def add_comparison_operators_to_class(class_type):
+def add_common_operators_to_class(class_type):
     from pandas_to_sql.engine.columns.bool_column import BoolColumn
 
     def __lt__(self,other):
@@ -74,6 +74,16 @@ def add_comparison_operators_to_class(class_type):
     
     def __or__(self,other):
         return create_column_from_operation(self, other, BoolColumn, 'OR')
+    
+    def fillna(self, v):
+        dtype = type(self)
+        return dtype(sql_string=f'(IFNULL({value_to_sql_string(self)}, {value_to_sql_string(v)}))')  
+
+    def astype(self, t):
+        tt = convert_df_type(t)
+        dtype = get_column_class_from_type(tt)
+        return dtype(sql_string=f'(CAST({value_to_sql_string(self)} AS {tt}))')  
+
 
     class_type.__lt__ = __lt__
     class_type.__gt__ = __gt__
@@ -83,3 +93,8 @@ def add_comparison_operators_to_class(class_type):
     class_type.__ne__ = __ne__
     class_type.__and__ = __and__
     class_type.__or__ = __or__
+    class_type.fillna = fillna
+    class_type.astype = astype
+    
+
+

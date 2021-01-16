@@ -2,7 +2,7 @@ from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 import pandas as pd
 from pandas_to_sql.engine.columns.column import Column
-from pandas_to_sql.engine.columns.common import add_comparison_operators_to_class, value_to_sql_string
+from pandas_to_sql.engine.columns.common import add_common_operators_to_class, value_to_sql_string
 from pandas_to_sql.engine.columns.numeric_columns import IntColumn, FloatColumn
 
 time_unit_to_format = {
@@ -74,7 +74,7 @@ def __my_add__(col, v):
         raise Exception(f'Supporting only timedelta, got {str(type(v))}')
 
 
-add_comparison_operators_to_class(TimestampColumn)
+add_common_operators_to_class(TimestampColumn)
 
 TimestampColumn.__add__ = __my_add__
 TimestampColumn.__radd__ = lambda self, l: __my_add__(self, l)

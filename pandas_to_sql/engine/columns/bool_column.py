@@ -1,5 +1,5 @@
 from pandas_to_sql.engine.columns.column import Column
-from pandas_to_sql.engine.columns.common import value_to_sql_string, add_comparison_operators_to_class
+from pandas_to_sql.engine.columns.common import value_to_sql_string, add_common_operators_to_class
 
 
 class BoolColumn(Column):
@@ -13,4 +13,4 @@ class BoolColumn(Column):
         return BoolColumn(sql_string=f'(NOT({value_to_sql_string(self)}))')
 
 
-add_comparison_operators_to_class(BoolColumn)
+add_common_operators_to_class(BoolColumn)

@@ -1,6 +1,6 @@
 from pandas_to_sql.engine.columns.column import Column
 from pandas_to_sql.engine.columns.numeric_columns import IntColumn
-from pandas_to_sql.engine.columns.common import add_comparison_operators_to_class, value_to_sql_string, create_column_from_operation
+from pandas_to_sql.engine.columns.common import add_common_operators_to_class, value_to_sql_string, create_column_from_operation
 
 
 class StrColumn(Column):
@@ -19,7 +19,7 @@ class StrColumn(Column):
         return create_column_from_operation(self, StrColumn, l, '||')
 
 
-add_comparison_operators_to_class(StrColumn)
+add_common_operators_to_class(StrColumn)
 
 StrColumn.lower = lambda self: StrColumn(sql_string=f'(LOWER({value_to_sql_string(self)}))')
 StrColumn.upper = lambda self: StrColumn(sql_string=f'(UPPER({value_to_sql_string(self)}))')

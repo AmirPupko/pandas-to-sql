@@ -1,5 +1,5 @@
 from pandas_to_sql.engine.columns.column import Column
-from pandas_to_sql.engine.columns.common import add_comparison_operators_to_class, value_to_sql_string, create_column_from_operation
+from pandas_to_sql.engine.columns.common import add_common_operators_to_class, value_to_sql_string, create_column_from_operation
 
 
 class FloatColumn(Column):
@@ -79,9 +79,12 @@ def round_(self):
     s = f'(CASE WHEN {is_fractional_part_exactly_half} AND {is_integer_part_even} THEN {round_with_change} ELSE {simple_round} END)'
     return FloatColumn(sql_string=s)
 
+def abs_(self):
+    return type(self)(sql_string=f'ABS({value_to_sql_string(self)})')  
 
 
-add_comparison_operators_to_class(FloatColumn)
+
+add_common_operators_to_class(FloatColumn)
 FloatColumn.__add__ = __add__
 FloatColumn.__radd__ = __radd__
 FloatColumn.__sub__ = __sub__
@@ -95,9 +98,10 @@ FloatColumn.__rtruediv__ = __rtruediv__
 FloatColumn.__abs__ = __abs__
 FloatColumn.__neg__ = __neg__
 FloatColumn.round = round_
+FloatColumn.abs = abs_
 
 
-add_comparison_operators_to_class(IntColumn)
+add_common_operators_to_class(IntColumn)
 IntColumn.__add__ = __add__
 IntColumn.__radd__ = __radd__
 IntColumn.__sub__ = __sub__
@@ -111,3 +115,5 @@ IntColumn.__rtruediv__ = __rtruediv__
 IntColumn.__abs__ = __abs__
 IntColumn.__neg__ = __neg__
 IntColumn.round = round_
+IntColumn.abs = abs_
+

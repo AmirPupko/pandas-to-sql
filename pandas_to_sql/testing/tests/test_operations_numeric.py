@@ -94,3 +94,10 @@ def test_round_with_half_values():
         df[c + '_new'] = df[c].round()
     
     assert_(df)
+
+
+def test_abs():
+    df = pytest.df1
+    df['new_value'] = df.random_float.abs()
+    assert_(df)
+
