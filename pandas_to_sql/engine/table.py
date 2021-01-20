@@ -78,6 +78,15 @@ class Table:
         new_table.columns = new_columns
         return new_table
 
+    def drop(self, columns):
+        self.had_changed = True
+        new_table = copy(self)
+        new_columns = { col_name: col_value 
+            for col_name, col_value in new_table.columns.items() 
+            if col_name not in columns }
+        new_table.columns = new_columns
+        return new_table
+
     def where(self, cond_column):
         self.had_changed = True
         new_table = copy(self)
