@@ -65,6 +65,19 @@ class Table:
     def to_frame(self):
         return copy(self)
 
+    def rename(self, columns):
+        self.had_changed = True
+        new_table = copy(self)
+        new_columns = {}
+        for col_name, col_value in new_table.columns.items():
+            if col_name in columns.keys():
+                new_columns[columns[col_name]] = col_value
+            else:
+                new_columns[col_name] = col_value
+
+        new_table.columns = new_columns
+        return new_table
+
     def where(self, cond_column):
         self.had_changed = True
         new_table = copy(self)
