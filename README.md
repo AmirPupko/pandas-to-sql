@@ -17,23 +17,23 @@ Here is an [Example Notebook with Colab](https://github.com/AmirPupko/pandas-to-
 
 
 ## Installation
-`pip install pandas-to=sql`
+`pip install pandas-to=sql`  
 
 
 ## Development
 
 ### run example
-`python example_runner.py`
+`python example_runner.py`  
 
 ### tests
-`pytest ./pandas_to_sql`
+`pytest ./pandas_to_sql`  
 
 ### environment
-`conda env create -f environment.yml --prefix ./env`
-`conda activate ./env`
-`conda env update --prefix ./env -f environment.yml`
-`conda remove --prefix ./env --all`
+`conda env create -f environment.yml --prefix ./env`  
+`conda activate ./env`  
+`conda env update --prefix ./env -f environment.yml`  
+`conda remove --prefix ./env --all`  
 
 ### new release
-`python setup.py sdist bdist_wheel`
-`python -m twine upload --repository pypi --skip-existing dist/*`
+`python setup.py sdist bdist_wheel`  
+`python -m twine upload --repository pypi --skip-existing dist/*`  
