@@ -18,7 +18,7 @@ Support:
 >>> import pandas as pd
 >>> import pandas_to_sql
 >>> iris = pd.read_csv('https://raw.githubusercontent.com/mwaskom/seaborn-data/master/iris.csv')
->>> df = pandas_to_sql.wrap_df(iris, 'iris')
+>>> df = pandas_to_sql.wrap_df(iris,  table_name='iris')
 >>> df.get_sql_string()
 'SELECT (sepal_length) AS sepal_length, (sepal_width) AS sepal_width, (petal_length) AS petal_length, (petal_width) AS petal_width, (species) AS species FROM iris'
 ```
