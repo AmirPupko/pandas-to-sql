@@ -1,3 +1,4 @@
+
 # pandas-to-sql
 **This libaray is not production ready!!**
 
@@ -12,8 +13,22 @@ Support:
  - [sqlite](https://sqlite.org/)
 
 ### Try it yourself
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/AmirPupko/pandas-to-sql/blob/main/pandas_to_sql_colab_example.ipynb)
-Here is an [Example Notebook with Colab](https://github.com/AmirPupko/pandas-to-sql/blob/main/pandas_to_sql_colab_example.ipynb) 
+
+```python
+>>> import pandas as pd
+>>> import pandas_to_sql
+>>> iris = pd.read_csv('https://raw.githubusercontent.com/mwaskom/seaborn-data/master/iris.csv')
+>>> df = pandas_to_sql.wrap_df(iris, 'iris')
+>>> df.get_sql_string()
+'SELECT (sepal_length) AS sepal_length, (sepal_width) AS sepal_width, (petal_length) AS petal_length, (petal_width) AS petal_width, (species) AS species FROM iris'
+```
+
+```python
+>>> df[df.species == 'setosa'].get_sql_string()
+"SELECT (sepal_length) AS sepal_length, (sepal_width) AS sepal_width, (petal_length) AS petal_length, (petal_width) AS petal_width, (species) AS species FROM iris WHERE ((species = 'setosa')) "
+```
+
+[Here are some more examples](https://github.com/AmirPupko/pandas-to-sql/blob/main/pandas_to_sql_colab_example.ipynb) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/AmirPupko/pandas-to-sql/blob/main/pandas_to_sql_colab_example.ipynb)
 
 
 ## Installation
