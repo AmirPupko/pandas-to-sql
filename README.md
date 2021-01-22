@@ -32,7 +32,7 @@ Support:
 
 
 ## Installation
-`pip install pandas-to=sql`  
+`pip install pandas-to-sql`  
 
 
 ## Development
